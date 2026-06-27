@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmos — Explore the Universe</title>
+
+  <style>
+    /* ============================================================
+       RESET & VARIABLES
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:       #080B14;
+      --card:     #0E1220;
+      --purple:   #6B3FA0;
+      --purple2:  #9B6FD0;
+      --white:    #F0EEF8;
+      --cyan:     #4FC3C8;
+      --amber:    #C89B3C;
+      --muted:    #8A8DA8;
+      --border:   rgba(107, 63, 160, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+    ============================================================ */
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.9rem;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 52ch;
+      margin-bottom: 3rem;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(8, 11, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn-primary {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: transparent;
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: 1px solid rgba(240, 238, 248, 0.25);
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    #starfield {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.8s 0.2s both;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      max-width: 14ch;
+      margin: 0 auto;
+      animation: fadeUp 0.8s 0.4s both;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--purple2), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      max-width: 46ch;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeUp 0.8s 0.6s both;
+    }
+
+    .hero-buttons {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s 0.8s both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      animation: bob 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       STATS STRIP
+    ============================================================ */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem 0.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.35rem;
+    }
+
+    /* ============================================================
+       PLANETS SECTION
+    ============================================================ */
+    .planets-section {
+      padding: 5rem 2rem;
+    }
+
+    .planets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    /* Planet Card */
+    .planet-card {
+      background: var(--card);
+      border: 1px solid rgba(107, 63, 160, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .planet-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--cyan);
+      box-shadow: 0 0 35px rgba(79, 195, 200, 0.1);
+    }
+
+    .planet-visual {
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .planet-orb {
+      border-radius: 50%;
+      position: relative;
+      transition: transform 0.4s;
+      flex-shrink: 0;
+    }
+
+    .planet-card:hover .planet-orb {
+      transform: scale(1.06) rotate(5deg);
+    }
+
+    .planet-info {
+      padding: 1.2rem 1.4rem 1.4rem;
+    }
+
+    .planet-type {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.3rem;
+    }
+
+    .planet-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.6rem;
+    }
+
+    .planet-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .planet-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid rgba(107, 63, 160, 0.15);
+    }
+
+    .meta-item {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+
+    /* Saturn ring helper */
+    .ring-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid rgba(200, 160, 60, 0.4);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       MISSIONS SECTION
+    ============================================================ */
+    .missions-section {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, var(--bg) 0%, #0B0E1C 100%);
+    }
+
+    .missions-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .mission-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mission-card {
+      background: var(--card);
+      border: 1px solid rgba(107, 63, 160, 0.15);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .mission-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .mission-text h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .mission-text p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .mission-badge {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-active   { background: rgba(79,195,200,0.15);  color: var(--cyan);    }
+    .badge-enroute  { background: rgba(200,155,60,0.15);  color: var(--amber);   }
+    .badge-deep     { background: rgba(107,63,160,0.2);   color: var(--purple2); }
+
+    /* Quote panel */
+    .quote-panel {
+      background: linear-gradient(135deg, rgba(107,63,160,0.1), rgba(79,195,200,0.05));
+      border: 1px solid rgba(107, 63, 160, 0.25);
+      border-radius: 14px;
+      padding: 2.5rem;
+      position: sticky;
+      top: 5rem;
+    }
+
+    .quote-panel blockquote {
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.3rem;
+    }
+
+    .quote-panel blockquote em {
+      font-style: normal;
+      color: var(--cyan);
+    }
+
+    .quote-author {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .quote-author strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.85rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .quote-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2rem 0;
+    }
+
+    .quote-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .qstat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .qstat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    /* ============================================================
+       NEWSLETTER SECTION
+    ============================================================ */
+    .newsletter-section {
+      padding: 5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(107,63,160,0.15) 0%, transparent 70%);
+    }
+
+    .newsletter-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .newsletter-inner .section-sub {
+      max-width: none;
+      margin-bottom: 0;
+    }
+
+    .email-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .email-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.8rem 1.1rem;
+      background: var(--card);
+      border: 1px solid rgba(107, 63, 160, 0.3);
+      border-radius: 6px;
+      color: var(--white);
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .email-input::placeholder {
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       KEYFRAME ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0);    }
+      50%       { transform: translateX(-50%) translateY(-6px); }
+    }
+
+    /* ============================================================
+       RESPONSIVE — MOBILE
+    ============================================================ */
+    @media (max-width: 700px) {
+      nav { padding: 0.9rem 1.2rem; }
+      .nav-links { display: none; }
+
+      .stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1.2rem;
+      }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-right: 1px solid var(--border); }
+      .stat-item:nth-child(3),
+      .stat-item:nth-child(4) { border-top: 1px solid var(--border); }
+
+      .planets-section,
+      .missions-section,
+      .newsletter-section { padding: 3.5rem 1.2rem; }
+
+      .missions-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .quote-panel { position: static; }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1.2rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav>
+    <a href="#" class="nav-logo">COS<span>MOS</span></a>
+    <ul class="nav-links">
+      <li><a href="#planets">Planets</a></li>
+      <li><a href="#missions">Missions</a></li>
+      <li><a href="#newsletter">Updates</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero">
+    <canvas id="starfield"></canvas>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Welcome to the cosmos</p>
+      <h1>
+        The universe is
+        <span class="gradient-text">bigger</span>
+        than you think
+      </h1>
+      <p class="hero-sub">
+        Explore planets, track active missions, and stay up to date
+        with humanity's greatest adventure — reaching the stars.
+      </p>
+      <div class="hero-buttons">
+        <a href="#planets"  class="btn-primary">Explore Planets</a>
+        <a href="#missions" class="btn-outline">Current Missions</a>
+      </div>
+    </div>
+
+    <p class="scroll-hint">↓ scroll to explore</p>
+  </section>
+
+
+  <!-- ============================================================
+       STATS STRIP
+  ============================================================ -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-number">8</div>
+      <div class="stat-label">Planets in our system</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">200B+</div>
+      <div class="stat-label">Stars in the Milky Way</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">46.5B</div>
+      <div class="stat-label">Light-years across</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">2T+</div>
+      <div class="stat-label">Galaxies in universe</div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       PLANETS
+  ============================================================ -->
+  <section id="planets" class="planets-section">
+
+    <span class="eyebrow">Solar System</span>
+    <h2 class="section-title">Our cosmic neighbours</h2>
+    <p class="section-sub">
+      From the scorched surface of Mercury to the icy storms of Neptune,
+      each world is a universe unto itself.
+    </p>
+
+    <div class="planets-grid">
+
+      <!-- Mercury -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #1a0f05, #080B14);">
+          <div class="planet-orb" style="
+            width: 100px; height: 100px;
+            background: radial-gradient(circle at 35% 30%, #e8a96a, #b06a1a 60%, #5a2800);
+            box-shadow: 0 0 40px rgba(200,120,40,0.4);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Terrestrial</div>
+          <div class="planet-name">Mercury</div>
+          <p class="planet-desc">The smallest and fastest planet, completing an orbit in just 88 days while enduring extreme temperature swings.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>57.9M km</strong>from Sun</div>
+            <div class="meta-item"><strong>430 °C</strong>max temp</div>
+            <div class="meta-item"><strong>0</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Venus -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #1a0e00, #080B14);">
+          <div class="planet-orb" style="
+            width: 118px; height: 118px;
+            background: radial-gradient(circle at 35% 30%, #f5c96e, #c8832a 55%, #7a4000);
+            box-shadow: 0 0 50px rgba(220,160,50,0.45);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Terrestrial</div>
+          <div class="planet-name">Venus</div>
+          <p class="planet-desc">Shrouded in toxic clouds, Venus hosts a runaway greenhouse effect making it hotter than Mercury.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>108M km</strong>from Sun</div>
+            <div class="meta-item"><strong>465 °C</strong>avg temp</div>
+            <div class="meta-item"><strong>0</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Earth -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #001020, #080B14);">
+          <div class="planet-orb" style="
+            width: 110px; height: 110px;
+            background: radial-gradient(circle at 35% 30%, #4aa8e8, #1a6a9a 55%, #0a2a4a);
+            box-shadow: 0 0 50px rgba(60,140,200,0.45);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Terrestrial</div>
+          <div class="planet-name">Earth</div>
+          <p class="planet-desc">Our pale blue dot — the only known world with life, wrapped in a delicate atmosphere that keeps us safe.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>150M km</strong>from Sun</div>
+            <div class="meta-item"><strong>15 °C</strong>avg temp</div>
+            <div class="meta-item"><strong>1</strong>moon</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mars -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #1a0800, #080B14);">
+          <div class="planet-orb" style="
+            width: 105px; height: 105px;
+            background: radial-gradient(circle at 35% 30%, #e07860, #a03820 60%, #4a1000);
+            box-shadow: 0 0 45px rgba(180,70,30,0.4);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Terrestrial</div>
+          <div class="planet-name">Mars</div>
+          <p class="planet-desc">The Red Planet hosts the tallest volcano in the solar system and is our prime candidate for a second home.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>228M km</strong>from Sun</div>
+            <div class="meta-item"><strong>-60 °C</strong>avg temp</div>
+            <div class="meta-item"><strong>2</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jupiter -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #0e0a00, #080B14);">
+          <div class="ring-wrap">
+            <div class="ring" style="width:200px;height:30px;border-color:rgba(200,140,40,0.25);"></div>
+            <div class="ring" style="width:185px;height:26px;border-color:rgba(180,120,30,0.2);"></div>
+            <div class="planet-orb" style="
+              width: 140px; height: 140px;
+              background: radial-gradient(circle at 35% 30%, #d4a84a, #a06820 55%, #5a3000);
+              box-shadow: 0 0 60px rgba(200,140,50,0.4);
+              z-index: 1;
+            "></div>
+          </div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Gas Giant</div>
+          <div class="planet-name">Jupiter</div>
+          <p class="planet-desc">The king of planets. Its Great Red Spot — a storm larger than Earth — has raged for centuries.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>778M km</strong>from Sun</div>
+            <div class="meta-item"><strong>-110 °C</strong>clouds</div>
+            <div class="meta-item"><strong>95</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saturn -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #0e0a05, #080B14);">
+          <div class="ring-wrap">
+            <div class="ring" style="width:220px;height:22px;border-color:rgba(200,160,60,0.35);border-width:4px;"></div>
+            <div class="ring" style="width:200px;height:18px;border-color:rgba(180,140,50,0.25);border-width:3px;"></div>
+            <div class="ring" style="width:240px;height:28px;border-color:rgba(160,120,40,0.2);border-width:2px;"></div>
+            <div class="planet-orb" style="
+              width: 126px; height: 126px;
+              background: radial-gradient(circle at 35% 30%, #e8d090, #b89840 55%, #6a5010);
+              box-shadow: 0 0 55px rgba(200,170,70,0.35);
+              z-index: 1;
+            "></div>
+          </div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Gas Giant</div>
+          <div class="planet-name">Saturn</div>
+          <p class="planet-desc">Saturn's iconic rings span 282,000 km but are only a few hundred metres thick — a masterpiece of nature.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>1.43B km</strong>from Sun</div>
+            <div class="meta-item"><strong>-140 °C</strong>clouds</div>
+            <div class="meta-item"><strong>146</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uranus -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #050e14, #080B14);">
+          <div class="planet-orb" style="
+            width: 116px; height: 116px;
+            background: radial-gradient(circle at 35% 30%, #88d8e8, #3898b0 55%, #0a4a60);
+            box-shadow: 0 0 55px rgba(60,170,200,0.4);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Ice Giant</div>
+          <div class="planet-name">Uranus</div>
+          <p class="planet-desc">Tilted nearly on its side, Uranus orbits like a rolling ball with seasons that each last over 20 years.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>2.87B km</strong>from Sun</div>
+            <div class="meta-item"><strong>-195 °C</strong>min temp</div>
+            <div class="meta-item"><strong>27</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Neptune -->
+      <div class="planet-card">
+        <div class="planet-visual" style="background: radial-gradient(circle at 30% 30%, #020510, #080B14);">
+          <div class="planet-orb" style="
+            width: 114px; height: 114px;
+            background: radial-gradient(circle at 35% 30%, #4878d8, #1838a8 55%, #081040);
+            box-shadow: 0 0 55px rgba(50,80,200,0.45);
+          "></div>
+        </div>
+        <div class="planet-info">
+          <div class="planet-type">Ice Giant</div>
+          <div class="planet-name">Neptune</div>
+          <p class="planet-desc">The windiest world in the solar system — storms rage at 2,100 km/h in its outermost reaches.</p>
+          <div class="planet-meta">
+            <div class="meta-item"><strong>4.5B km</strong>from Sun</div>
+            <div class="meta-item"><strong>-200 °C</strong>min temp</div>
+            <div class="meta-item"><strong>16</strong>moons</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       MISSIONS
+  ============================================================ -->
+  <section id="missions" class="missions-section">
+    <div class="missions-layout">
+
+      <!-- Left: mission list -->
+      <div>
+        <span class="eyebrow">Active &amp; Planned</span>
+        <h2 class="section-title">Missions pushing the frontier</h2>
+        <p class="section-sub">
+          From rovers on Mars to probes at the edge of the heliosphere,
+          humanity never stops reaching outward.
+        </p>
+
+        <div class="mission-list">
+
+          <div class="mission-card">
+            <div class="mission-icon" style="background: rgba(79,195,200,0.1);">🔭</div>
+            <div class="mission-text">
+              <h3>James Webb Space Telescope</h3>
+              <p>Observing light from the universe's first galaxies — 13.6 billion years old — with unprecedented clarity.</p>
+            </div>
+            <span class="mission-badge badge-active">Active</span>
+          </div>
+
+          <div class="mission-card">
+            <div class="mission-icon" style="background: rgba(200,155,60,0.1);">🚀</div>
+            <div class="mission-text">
+              <h3>Artemis Moon Program</h3>
+              <p>NASA's crewed return to the lunar surface, building a sustainable human presence on and around the Moon.</p>
+            </div>
+            <span class="mission-badge badge-active">Active</span>
+          </div>
+
+          <div class="mission-card">
+            <div class="mission-icon" style="background: rgba(107,63,160,0.15);">🤖</div>
+            <div class="mission-text">
+              <h3>Perseverance Mars Rover</h3>
+              <p>Collecting rock samples for future return to Earth and searching for signs of ancient microbial life.</p>
+            </div>
+            <span class="mission-badge badge-active">Active</span>
+          </div>
+
+          <div class="mission-card">
+            <div class="mission-icon" style="background: rgba(79,195,200,0.1);">🛸</div>
+            <div class="mission-text">
+              <h3>Europa Clipper</h3>
+              <p>En route to Jupiter's moon Europa to investigate its subsurface ocean for signs of habitability.</p>
+            </div>
+            <span class="mission-badge badge-enroute">En Route</span>
+          </div>
+
+          <div class="mission-card">
+            <div class="mission-icon" style="background: rgba(107,63,160,0.15);">🌌</div>
+            <div class="mission-text">
+              <h3>Voyager 1</h3>
+              <p>Launched 1977. Over 24 billion km away — the farthest human-made object, still transmitting from interstellar space.</p>
+            </div>
+            <span class="mission-badge badge-deep">Interstellar</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: quote panel -->
+      <div>
+        <div class="quote-panel">
+          <blockquote>
+            "The universe is under no obligation to make sense
+            <em>to you.</em>"
+          </blockquote>
+          <div class="quote-author">
+            <strong>Neil deGrasse Tyson</strong>
+            Astrophysicist &amp; Science Communicator
+          </div>
+
+          <div class="quote-divider"></div>
+
+          <div class="quote-stats">
+            <div>
+              <div class="qstat-number" style="color: var(--cyan);">24+</div>
+              <div class="qstat-label">Deep-space probes active</div>
+            </div>
+            <div>
+              <div class="qstat-number" style="color: var(--amber);">1969</div>
+              <div class="qstat-label">First Moon landing</div>
+            </div>
+            <div>
+              <div class="qstat-number" style="color: var(--purple2);">568</div>
+              <div class="qstat-label">Humans in space so far</div>
+            </div>
+            <div>
+              <div class="qstat-number" style="color: var(--cyan);">5,600+</div>
+              <div class="qstat-label">Confirmed exoplanets</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       NEWSLETTER
+  ============================================================ -->
+  <section id="newsletter" class="newsletter-section">
+    <div class="newsletter-inner">
+      <span class="eyebrow">Stay in orbit</span>
+      <h2 class="section-title" style="text-align: center; max-width: none;">
+        Mission updates, straight to your inbox
+      </h2>
+      <p class="section-sub" style="max-width: none; text-align: center;">
+        Get weekly dispatches on discoveries, missions, and what's next
+        for humanity in space.
+      </p>
+      <div class="email-row">
+        <input class="email-input" type="email" placeholder="your@email.com" />
+        <button class="btn-primary">Subscribe →</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <p>© 2026 Cosmos. A fan project celebrating space exploration.</p>
+    <ul class="footer-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Sources</a></li>
+      <li><a href="#">NASA.gov</a></li>
+    </ul>
+  </footer>
+
+
+  <!-- ============================================================
+       STARFIELD SCRIPT
+  ============================================================ -->
+  <script>
+    (function () {
+      var canvas = document.getElementById('starfield');
+      var ctx    = canvas.getContext('2d');
+      var stars  = [];
+      var COUNT  = 240;
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function initStars() {
+        stars = [];
+        for (var i = 0; i < COUNT; i++) {
+          stars.push({
+            x:       Math.random() * canvas.width,
+            y:       Math.random() * canvas.height,
+            r:       Math.random() * 1.3 + 0.2,
+            alpha:   Math.random() * 0.65 + 0.2,
+            speed:   Math.random() * 0.25 + 0.04,
+            drift:   (Math.random() - 0.5) * 0.06,
+            phase:   Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.phase += 0.011;
+          var a = s.alpha * (0.55 + 0.45 * Math.sin(s.phase));
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(240,238,248,' + a + ')';
+          ctx.fill();
+
+          s.y -= s.speed * 0.12;
+          s.x += s.drift;
+
+          if (s.y < -2) {
+            s.y = canvas.height + 2;
+            s.x = Math.random() * canvas.width;
+          }
+          if (s.x < -2 || s.x > canvas.width + 2) {
+            s.x = Math.random() * canvas.width;
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      initStars();
+      draw();
+
+      window.addEventListener('resize', function () {
+        resize();
+        initStars();
+      });
+    })();
+  </script>
+
+</body>
+</html>
