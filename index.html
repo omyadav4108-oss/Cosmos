@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAVOR · A 3D Culinary Experience</title>
+<meta name="description" content="SAVOR — an immersive 3D digital food menu experience." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 3D animated background canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-plate"></div>
+      <p class="loader-text">SAVOR</p>
+      <div class="loader-bar"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="brand">SAVOR<span>°</span></a>
+    <ul class="nav-links">
+      <li><a href="#menu" data-nav>Menu</a></li>
+      <li><a href="#signature" data-nav>Signature</a></li>
+      <li><a href="#story" data-nav>Story</a></li>
+    </ul>
+    <a href="#reserve" class="nav-cta">Reserve</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-reveal>Est. 2026 · Fine Dining Reimagined</p>
+      <h1 class="hero-title">
+        <span class="line" data-reveal>Taste</span>
+        <span class="line accent" data-reveal>in Three</span>
+        <span class="line" data-reveal>Dimensions</span>
+      </h1>
+      <p class="hero-sub" data-reveal>
+        A living, breathing menu you can explore. Tilt, spin, and savor every dish
+        before it ever reaches your table.
+      </p>
+      <div class="hero-actions" data-reveal>
+        <a href="#menu" class="btn btn-primary">Explore the Menu</a>
+        <a href="#story" class="btn btn-ghost">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-scroll" data-reveal>
+      <span></span>Scroll to feast
+    </div>
+  </header>
+
+  <!-- Menu Section -->
+  <section class="section menu" id="menu">
+    <div class="section-head">
+      <p class="kicker" data-reveal>The Collection</p>
+      <h2 class="section-title" data-reveal>Dishes that dance in space</h2>
+      <p class="section-lead" data-reveal>Hover a card to bring each plate to life. Every dish is crafted to be seen from every angle.</p>
+    </div>
+
+    <div class="filters" data-reveal>
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="starter">Starters</button>
+      <button class="filter" data-filter="main">Mains</button>
+      <button class="filter" data-filter="dessert">Desserts</button>
+      <button class="filter" data-filter="drink">Drinks</button>
+    </div>
+
+    <div class="cards" id="cards"><!-- injected by JS --></div>
+  </section>
+
+  <!-- Signature parallax showcase -->
+  <section class="section signature" id="signature">
+    <div class="sig-inner">
+      <div class="sig-text">
+        <p class="kicker" data-reveal>Chef's Signature</p>
+        <h2 class="section-title" data-reveal>The Golden Saffron Risotto</h2>
+        <p class="section-lead" data-reveal>
+          Twenty-one days aged carnaroli rice, hand-folded with Persian saffron,
+          finished with 24k edible gold leaf and a whisper of aged parmesan.
+        </p>
+        <ul class="sig-facts">
+          <li data-reveal><strong>42</strong><span>minutes of slow craft</span></li>
+          <li data-reveal><strong>7</strong><span>rare ingredients</span></li>
+          <li data-reveal><strong>1</strong><span>unforgettable bite</span></li>
+        </ul>
+        <a href="#reserve" class="btn btn-primary" data-reveal>Taste it tonight</a>
+      </div>
+      <div class="sig-visual" id="sig-visual" data-reveal>
+        <div class="sig-orb"></div>
+        <div class="sig-ring r1"></div>
+        <div class="sig-ring r2"></div>
+        <div class="sig-emoji">🍚</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story marquee -->
+  <section class="marquee" id="story">
+    <div class="marquee-track">
+      <span>Locally Sourced&nbsp;·&nbsp;Hand Crafted&nbsp;·&nbsp;Seasonal&nbsp;·&nbsp;Sustainable&nbsp;·&nbsp;Unforgettable&nbsp;·&nbsp;</span>
+      <span>Locally Sourced&nbsp;·&nbsp;Hand Crafted&nbsp;·&nbsp;Seasonal&nbsp;·&nbsp;Sustainable&nbsp;·&nbsp;Unforgettable&nbsp;·&nbsp;</span>
+    </div>
+  </section>
+
+  <!-- Reserve / CTA -->
+  <section class="section reserve" id="reserve">
+    <div class="reserve-card" data-reveal>
+      <h2 class="section-title">Reserve your table in the stars</h2>
+      <p class="section-lead">Seatings nightly from 6pm. Let us craft an evening you'll taste for years.</p>
+      <form class="reserve-form" id="reserve-form">
+        <input type="text" placeholder="Name" required />
+        <input type="email" placeholder="Email" required />
+        <input type="number" placeholder="Guests" min="1" max="12" value="2" required />
+        <button type="submit" class="btn btn-primary">Book Now</button>
+      </form>
+      <p class="reserve-note" id="reserve-note"></p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="brand">SAVOR<span>°</span></p>
+    <p>12 Nebula Lane · Open 6pm–late · +1 (555) 0100</p>
+    <p class="footer-fine">© 2026 SAVOR. Crafted with fire, saffron, and a little gravity.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
